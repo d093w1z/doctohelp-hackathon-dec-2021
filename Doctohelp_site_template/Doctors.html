@@ -1,0 +1,134 @@
+<head>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header class="header">
+    <a href="#" class="logo">Doc<span>to</span>Help</a>
+
+    <nav class="navbar">
+      <a href="index.html">home</a>
+      <a href="index.html">service</a>
+      <a href="index.html">about</a>
+      <a href="index.html">gallery</a>
+      <a href="index.html">Trustee</a>
+      <a href="index.html">review</a>
+      <a href="index.html">Login</a>
+    </nav>
+
+    <div id="menu-bars" class="fas fa-bars"></div>
+  </header>
+  <section class="doctors" id="doctors">
+    <h1 class="heading">our <span>doctors</span></h1>
+
+    <div class="box-container" id="box-container">
+      <!-- <div class="box">
+                <img src="images/doc1.jpg" alt="">
+                <h3>john deo</h3>
+
+                <div class="BOOK">
+                    <button type="button">Book Appointment</button>
+                </div>
+            </div>
+
+            <div class="box">
+                <img src="images/doc2.jpg" alt="">
+                <h3>john deo</h3>
+
+                <div class="BOOK">
+                    <button type="button">Book Appointment</button>
+                </div>
+            </div>
+
+            <div class="box">
+                <img src="images/doc3.jpg" alt="">
+                <h3>john deo</h3>
+
+                <div class="BOOK">
+                    <button type="button">Book Appointment</button>
+                </div>
+            </div>
+
+            <div class="box">
+                <img src="images/doc4.jpg" alt="">
+                <h3>john deo</h3>
+
+                <div class="BOOK">
+                    <button type="button">Book Appointment</button>
+                </div>
+            </div>
+
+            <div class="box">
+                <img src="images/doc7.jpg" alt="">
+                <h3>john deo</h3>
+
+                <div class="BOOK">
+                    <button type="button">Book Appointment</button>
+                </div>
+            </div>
+
+            <div class="box">
+                <img src="images/doc6.jpg" alt="">
+                <h3>john deo</h3>
+
+                <div class="BOOK">
+                    <button type="button">Book Appointment</button>
+                </div>
+            </div> -->
+    </div>
+  </section>
+  <script>
+    var prev_length = 0;
+    function loadDoctors() {
+      fetch("/docs", { method: "GET" })
+        .then(function (response) {
+          if (response.ok) return response.text();
+        })
+        .then((Data) => {
+          var box_container = document.getElementById("box-container");
+          var div =
+            '<div class="box"> \
+                    <img src="images/doc1.jpg" alt=""> \
+                    <h3>{NAME}</h3> \
+                    <div class="BOOK"> \
+                        <button type="button">Book Appointment</button> \
+                        </div> \
+                        </div>';
+          box_container.innerHTML = "";
+          JSON.parse(Data).forEach((element) => {
+            box_container.innerHTML += div.replace("\{NAME\}", element.name);
+          });
+          buttonEvents();
+        });
+    }
+    setInterval(() => {
+      fetch("/docs", { method: "GET" })
+        .then(function (response) {
+          if (response.ok) return response.json();
+        })
+        .then(function (json) {
+          if (prev_length != json.length) {
+            loadDoctors();
+            prev_length = json.length;
+          }
+        });
+    }, 1000);
+    function buttonEvents() {
+      var buttons = document.querySelectorAll("div.BOOK");
+      buttons.forEach((button) => {
+        button.addEventListener("click", function (e) {
+          fetch("/clicked", { method: "GET" })
+            .then(function (response) {
+              if (response.ok) {
+                return;
+              }
+              throw new Error("Request failed.");
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        });
+      });
+    }
+  </script>
+</body>
